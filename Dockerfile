@@ -25,7 +25,8 @@ RUN addgroup consul && \
     adduser --system --ingroup consul consul
 
 # standard mongo db data dir directories
-RUN mkdir -p /data/db
+RUN mkdir /data
+RUN mkdir /data/db
 RUN echo "this directory is reserved for EdgeX database files" > /data/db/README
 
 # EdgeX shared directories
@@ -38,8 +39,13 @@ RUN echo "this directory is reserved for EdgeX log files" > $EDGEX_BASE/logs/REA
 # The /consul/data dir is used by Consul to store state. The agent will be started
 # with /consul/config as the configuration directory so you can add additional
 # config files in that location.
-RUN mkdir -p /consul/data
+RUN mkdir /consul
+RUN mkdir /consul/config
+RUN mkdir /consul/data
+RUN echo "this directory is reserved for EdgeX Consul config files" > /consul/config/README
 RUN echo "this directory is reserved for EdgeX data files" > /consul/data/README
 RUN chown -R 100:1000 /consul
+
+COPY config /consul/config
 
 ENTRYPOINT /usr/bin/tail -f /dev/null
