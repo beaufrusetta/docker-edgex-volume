@@ -19,11 +19,6 @@
 FROM ubuntu:latest
 MAINTAINER Cloud Tsai <Cloud.Tsai@Dell.com>
 
-# Create a consul user and group first so the IDs get set the same way, even as
-# the rest of this may change over time.
-RUN addgroup consul && \
-    adduser --system --ingroup consul consul
-
 # standard mongo db data dir directories
 RUN mkdir -p /data/db
 RUN echo "this directory is reserved for EdgeX database files" > /data/db/README
@@ -32,11 +27,5 @@ RUN echo "this directory is reserved for EdgeX database files" > /data/db/README
 ENV EDGEX_BASE=/edgex
 RUN mkdir -p $EDGEX_BASE/logs
 RUN echo "this directory is reserved for EdgeX log files" > $EDGEX_BASE/logs/README
-
-# Consul config and data directories
-# The /consul/data dir is used by Consul to store state. 
-RUN mkdir -p /consul/data
-RUN echo "this directory is reserved for EdgeX data files" > /consul/data/README
-RUN chown -R 100:1000 /consul
 
 ENTRYPOINT /usr/bin/tail -f /dev/null
